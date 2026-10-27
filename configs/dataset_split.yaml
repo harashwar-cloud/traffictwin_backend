@@ -1,0 +1,132 @@
+# =============================================================================
+# configs/dataset_split.yaml
+# AIC21 Track 1 — Video-Level Train/Validation/Test Split
+#
+# RULE: Split is at VIDEO level (never frame level).
+# Variants of the same camera (dawn/rain/snow) are grouped with their base camera.
+# Test set videos are NEVER used during development.
+#
+# Split rationale:
+#   - 20 unique cameras → 20 camera groups
+#   - TRAIN: 14 cameras (70%)
+#   - VAL:    3 cameras (15%)
+#   - TEST:   3 cameras (15%)
+#
+# Ground truth note:
+#   Full counting GT is only available for cam_5 first 1 minute.
+#   Test cameras chosen to include cam_5 for evaluatable counting metrics.
+# =============================================================================
+
+split:
+  train_ratio: 0.70
+  val_ratio: 0.15
+  test_ratio: 0.15
+
+# ----------------------------------------------------------------------------
+# CAMERA-LEVEL GROUPS
+# Each camera may have multiple video variants (normal, dawn, rain, snow)
+# All variants of the same camera belong to the same split.
+# ----------------------------------------------------------------------------
+
+train_cameras:
+  - cam_1      # highway ramp, normal camera — variants: cam_1, cam_1_dawn, cam_1_rain
+  - cam_2      # highway ramp, PTZ camera — variants: cam_2, cam_2_rain
+  - cam_3      # highway ramp, PTZ camera — variants: cam_3, cam_3_rain
+  - cam_4      # four-leg signalized intersection, fisheye — variants: cam_4, cam_4_dawn, cam_4_rain
+  - cam_6      # four-leg signalized intersection, fisheye — variants: cam_6, cam_6_snow
+  - cam_7      # highway, normal camera — variants: cam_7, cam_7_dawn, cam_7_rain
+  - cam_9      # four-leg allway-stop intersection, normal
+  - cam_10     # single-approach intersection, normal
+  - cam_11     # single-approach intersection, normal
+  - cam_12     # single-approach intersection, normal
+  - cam_13     # single-approach intersection, normal
+  - cam_15     # intersection, normal
+  - cam_18     # intersection, normal
+  - cam_19     # intersection, normal
+
+val_cameras:
+  - cam_8      # three-leg allway-stop intersection, fisheye
+  - cam_14     # intersection, normal
+  - cam_16     # intersection, normal
+
+test_cameras:
+  - cam_5      # four-leg signalized intersection, fisheye — HAS GT: counting_example_cam_5_1min.csv
+  - cam_17     # intersection, normal
+  - cam_20     # intersection, normal
+
+# ----------------------------------------------------------------------------
+# EXPLICIT VIDEO-LEVEL LISTS
+# (derived from camera groups above)
+# ----------------------------------------------------------------------------
+
+train_videos:
+  - cam_1.mp4
+  - cam_1_dawn.mp4
+  - cam_1_rain.mp4
+  - cam_2.mp4
+  - cam_2_rain.mp4
+  - cam_3.mp4
+  - cam_3_rain.mp4
+  - cam_4.mp4
+  - cam_4_dawn.mp4
+  - cam_4_rain.mp4
+  - cam_6.mp4
+  - cam_6_snow.mp4
+  - cam_7.mp4
+  - cam_7_dawn.mp4
+  - cam_7_rain.mp4
+  - cam_9.mp4
+  - cam_10.mp4
+  - cam_11.mp4
+  - cam_12.mp4
+  - cam_13.mp4
+  - cam_15.mp4
+  - cam_18.mp4
+  - cam_19.mp4
+
+val_videos:
+  - cam_8.mp4
+  - cam_14.mp4
+  - cam_16.mp4
+
+test_videos:
+  - cam_5.mp4
+  - cam_5_dawn.mp4
+  - cam_5_rain.mp4
+  - cam_17.mp4
+  - cam_20.mp4
+
+# ----------------------------------------------------------------------------
+# STATS (based on datasetA_vid_stats.txt)
+# ----------------------------------------------------------------------------
+
+train_stats:
+  num_videos: 23
+  approx_cameras: 14
+  condition_variety: [normal, dawn, rain, snow]
+
+val_stats:
+  num_videos: 3
+  approx_cameras: 3
+
+test_stats:
+  num_videos: 5
+  approx_cameras: 3
+  has_gt: true
+  gt_file: "counting_gt_sample/counting_example_cam_5_1min.csv"
+  gt_coverage: "cam_5 first 600 frames (1 minute at 10fps)"
+
+# ----------------------------------------------------------------------------
+# COUNTING GT REFERENCE
+# Only cam_5 has publicly released counting ground truth.
+# Evaluation of counting accuracy must be restricted to this sample.
+# ----------------------------------------------------------------------------
+
+ground_truth:
+  available_gt_cameras: [cam_5]
+  gt_format: "video_clip_id, frame_id, movement_id, vehicle_class_id"
+  vehicle_classes:
+    1: Car
+    2: Truck
+  counting_rule: "Count when vehicle fully exits the ROI polygon"
+  excluded: ["motorcycles", "bicycles", "u-turns"]

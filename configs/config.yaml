@@ -1,0 +1,180 @@
+# =============================================================================
+# configs/config.yaml
+# TrafficTwin — Master Configuration
+# AIC21 Track 1 — Multi-Class Multi-Movement Vehicle Counting
+# =============================================================================
+
+project:
+  name: TrafficTwin
+  version: "1.0.0"
+  dataset: "AIC21 Track 1"
+
+paths:
+  dataset_root: "C:/Users/haras/Desktop/openhack/AIC21_Track1_Vehicle_Counting"
+  video_dir: "C:/Users/haras/Desktop/openhack/AIC21_Track1_Vehicle_Counting/Dataset_A"
+  roi_dir: "C:/Users/haras/Desktop/openhack/AIC21_Track1_Vehicle_Counting/ROIs"
+  movement_dir: "C:/Users/haras/Desktop/openhack/AIC21_Track1_Vehicle_Counting/movement_description"
+  gt_dir: "C:/Users/haras/Desktop/openhack/AIC21_Track1_Vehicle_Counting/counting_gt_sample"
+  project_root: "C:/Users/haras/Desktop/openhack/traffic_ml--main"
+  models_dir: "C:/Users/haras/Desktop/openhack/traffic_ml--main/models"
+  outputs_dir: "C:/Users/haras/Desktop/openhack/traffic_ml--main/outputs"
+  reports_dir: "C:/Users/haras/Desktop/openhack/traffic_ml--main/reports"
+
+hardware:
+  device: "cuda"          # "cuda" or "cpu" — auto-detected at runtime
+  gpu_vram_gb: 4.0
+  precision: "fp16"       # Half precision (FP16) on RTX 3050 Tensor Cores
+  num_workers: 4          # dataloader workers
+
+video:
+  source_fps: 10.0        # Override incorrect video header FPS
+
+# =============================================================================
+# DETECTION
+# =============================================================================
+detection:
+  model: "yolov8n"           # Chosen: lightweight, fits 4GB VRAM, fast inference
+  model_path: null           # null = auto-download; or set path to existing .pt
+  pretrained_weights: "yolov8n.pt"
+  confidence_threshold: 0.25 # Optimized for aerial roofs and ground vehicles
+  iou_threshold: 0.50        # Dense queue separation
+  input_size: 960            # High-resolution inference (640, 960, 1280 benchmarked)
+  drone_mode: false          # Set to true for automated aerial drone preset
+  target_coco_classes: [1, 2, 3, 5, 7]  # bicycle, car, motorcycle, bus, truck
+  car_coco_ids: [2, 5]            # treated as Car for counting
+  truck_coco_ids: [7]             # treated as Truck for counting
+  motorcycle_coco_ids: [3]        # motorcycle
+  bicycle_coco_ids: [1]           # bicycle
+
+# =============================================================================
+# TRACKING
+# =============================================================================
+tracking:
+  tracker: "bytetrack"      # bytetrack via ultralytics built-in
+  track_high_thresh: 0.25   # Lower threshold to retain top-view tracks
+  track_low_thresh: 0.10    # Low threshold for occluded roof tracks
+  new_track_thresh: 0.30
+  track_buffer: 40          # frames to keep lost track alive
+  match_thresh: 0.80        # IoU match threshold
+
+# =============================================================================
+# ROI FILTERING & SPATIAL VALIDATION
+# =============================================================================
+roi_filtering:
+  enabled: true
+  reference_point: "bottom_center"      # "bottom_center" (road contact) or "center"
+  boundary_tolerance_pixels: 8.0        # Margin in pixels for hysteresis band
+  roi_border_margin_pixels: 8.0         # Boundary tolerance
+  entry_confirm_frames: 2               # Consecutive frames inside to confirm entry
+  exit_confirm_frames: 3                # Consecutive frames outside to confirm exit
+  lost_grace_frames: 12                 # Grace period before track expires
+  show_outside_roi_detections: true     # Render outside vehicles with muted styling
+
+# =============================================================================
+# ROAD ASSIGNMENT HYSTERESIS
+# =============================================================================
+road_assignment:
+  switch_confirm_frames: 10
+  entry_confirm_frames: 5
+  lost_grace_frames: 15
+  boundary_margin_pixels: 15.0
+
+# =============================================================================
+# MOVEMENT STATE CLASSIFICATION (MOVING vs REST)
+# =============================================================================
+movement_state:
+  window_seconds: 0.75
+  start_moving_threshold_px_per_sec: 12.0
+  stop_moving_threshold_px_per_sec: 6.0
+  moving_confirm_frames: 3
+  rest_confirm_frames: 5
+  min_history_seconds: 0.5
+
+# =============================================================================
+# MOVEMENT ASSIGNMENT
+# =============================================================================
+movement:
+  method: "trajectory_roi_exit"
+  # A vehicle is assigned to a movement when its trajectory crosses the exit approach
+  min_track_length: 5       # minimum frames before movement can be assigned
+  exit_boundary_margin: 20  # pixels — distance from ROI boundary to trigger exit
+
+# =============================================================================
+# COUNTING
+# =============================================================================
+counting:
+  # Count vehicle ONCE when reference point enters the valid ROI (or initial appearance)
+  count_trigger: "roi_entry"  # "roi_entry" = count on ROI entry
+  min_track_length: 1         # Count immediately on valid entry
+  min_confidence: 0.35
+  prevent_recount: true       # track IDs are never counted twice
+
+# =============================================================================
+# TRAFFIC INTELLIGENCE LAYER
+# =============================================================================
+intelligence:
+  # Selected mechanism: Traffic-State/Risk Estimation
+  # Uses movement counts + temporal flow rates to classify traffic state
+  mechanism: "traffic_state_estimation"
+  time_window_seconds: 60     # rolling window for flow rate calculation
+  thresholds:
+    # Derived from dataset flow rates after processing. Initially set to reasonable defaults.
+    # These MUST be updated after processing real data.
+    low_flow_rate: 2.0        # vehicles/minute per movement
+    medium_flow_rate: 8.0
+    high_flow_rate: 15.0
+    # Traffic states: LOW, MEDIUM, HIGH, CRITICAL
+    critical_flow_rate: 25.0
+  direction_imbalance:
+    enabled: true
+    imbalance_threshold: 3.0  # ratio: if one direction > N * another direction
+
+# =============================================================================
+# INFERENCE PIPELINE
+# =============================================================================
+inference:
+  frame_skip: 0              # 0 = process every frame; N = skip N frames between processed
+  max_frames: null           # null = process full video; N = stop after N frames
+  save_annotated_video: true
+  save_json_results: true
+  annotated_video_fps: 10
+  video_output_dir: "C:/Users/haras/Desktop/openhack/traffic_ml--main/outputs/videos"
+  metrics_output_dir: "C:/Users/haras/Desktop/openhack/traffic_ml--main/outputs/metrics"
+
+# =============================================================================
+# EVALUATION
+# =============================================================================
+evaluation:
+  counting_metrics: ["MAE", "RMSE", "accuracy"]
+  gt_csv: "C:/Users/haras/Desktop/openhack/AIC21_Track1_Vehicle_Counting/counting_gt_sample/counting_example_cam_5_1min.csv"
+  eval_camera: "cam_5"
+  eval_duration_frames: 600   # first 600 frames only (1 minute at 10fps)
+
+# =============================================================================
+# VISUALIZATION
+# =============================================================================
+visualization:
+  show_bbox: true
+  show_track_id: true
+  show_class: true
+  show_movement: true
+  show_traffic_state: true
+  show_roi: true
+  bbox_thickness: 2
+  font_scale: 0.6
+  colors:
+    car: [0, 255, 0]          # green
+    truck: [0, 165, 255]      # orange
+    unknown: [200, 200, 200]  # grey
+    roi: [255, 255, 0]        # yellow
+    traffic_LOW: [0, 255, 0]
+    traffic_MEDIUM: [0, 165, 255]
+    traffic_HIGH: [0, 0, 255]
+    traffic_CRITICAL: [128, 0, 128]
+
+# =============================================================================
+# LOGGING
+# =============================================================================
+logging:
+  level: "INFO"
+  log_dir: "C:/Users/haras/Desktop/openhack/traffic_ml--main/reports"

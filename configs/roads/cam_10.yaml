@@ -1,0 +1,18 @@
+# configs/roads/cam_10.yaml
+# Multi-road polygon configuration for cam_10 — 3-Leg Signalized Intersection (PTZ)
+#
+# 1 road region — single approach corridor.
+# Annotation coordinate space: 1920×1080 (scaled at runtime).
+
+camera_id: cam_10
+
+roads:
+  - road_id: road_1
+    name: "Road 1 (Main Approach)"
+    color: [0, 230, 255]
+    length_meters: 60.0
+    roi:
+      - [100, 100]
+      - [1820, 100]
+      - [1820, 980]
+      - [100, 980]

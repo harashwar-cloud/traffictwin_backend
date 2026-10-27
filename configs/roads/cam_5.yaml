@@ -1,0 +1,40 @@
+# configs/roads/cam_5.yaml
+# Multi-road polygon configuration for CAM_5 — Fisheye 4-Leg Intersection
+#
+# The cam_5.txt single ROI covers the entire intersection:
+#   (1,277) → (450,99) → (599,96) → (1172,280) → (960,955) → (0,956)
+#
+# Here we split the scene into 2 logical road regions (approach corridors).
+# Use the diagnostic image at debug/<job_id>_road_mapping.jpg to verify polygon placement.
+#
+# IMPORTANT: These polygons are defined in the annotation coordinate space (1920×1080).
+# The pipeline automatically scales them to the actual video resolution.
+#
+# ROI points are (x, y) pairs in image coordinates.
+# Each road polygon must have at least 3 vertices.
+
+camera_id: cam_5
+
+roads:
+  - road_id: road_1
+    name: "Road 1 (North/West Approach)"
+    color: [0, 230, 255]   # BGR — cyan
+    length_meters: 50.0
+    roi:
+      - [1, 277]
+      - [450, 99]
+      - [599, 96]
+      - [1172, 280]
+      - [600, 540]
+      - [1, 540]
+
+  - road_id: road_2
+    name: "Road 2 (South/East Approach)"
+    color: [0, 140, 255]   # BGR — orange
+    length_meters: 50.0
+    roi:
+      - [1, 541]
+      - [600, 541]
+      - [1172, 280]
+      - [960, 955]
+      - [0, 956]

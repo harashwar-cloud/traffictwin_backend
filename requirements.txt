@@ -1,0 +1,41 @@
+# TrafficTwin — Requirements
+# AIC21 Track 1 — Multi-Class Multi-Movement Vehicle Counting
+#
+# All packages below are ALREADY installed in the project environment.
+# Listed here for documentation and reproducibility.
+# Install with: pip install -r requirements.txt
+
+# Core ML / Computer Vision (install CUDA build with: pip install torch torchvision --index-url https://download.pytorch.org/whl/cu126)
+torch>=2.5.1
+torchvision>=0.20.1
+ultralytics>=8.4.21      # YOLOv8 + ByteTrack (built-in)
+opencv-python>=4.10.0    # Video I/O, polygon ops, visualization
+
+# Data / Analytics
+numpy>=2.0.0
+pandas>=2.2.0
+scipy>=1.15.0
+scikit-learn>=1.6.0
+shapely>=2.0.0            # ROI polygon geometry (point-in-polygon, boundary checks)
+
+# Tracking
+lapx>=0.5.11             # Linear assignment for ByteTrack (Windows compatible prebuilt wheel)
+
+# Configuration
+PyYAML>=6.0.3
+
+# Visualization / Reporting
+matplotlib>=3.10.8
+seaborn>=0.13.2
+tqdm>=4.67.3
+
+# API (install if building FastAPI endpoint)
+# fastapi>=0.115.0
+# uvicorn[standard]>=0.30.0
+
+# Utilities
+psutil>=7.2.2
+python-dotenv>=1.2.2
+
+# Evaluation (install for MOTA/IDF1)
+# motmetrics>=1.4.0

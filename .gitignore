@@ -1,0 +1,69 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# Uploaded videos
+traffic_ml/data/uploads/
+data/uploads/
+
+# Generated/output videos
+traffic_ml/outputs/videos/
+outputs/videos/
+
+# Generated reports
+traffic_ml/reports/*.json
+traffic_ml/reports/*.md
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# ML caches
+.cache/
+*.cache
+
+# Node / Web Frontend
+node_modules/
+web/node_modules/
+dist/
+web/dist/
+.vite/
+npm-debug.log*
+yarn-debug.log*
+
+# Debug & Runtime artifacts
+debug/
+outputs/metrics/*
+!outputs/metrics/.gitkeep
+jobs/
+
+# Heavy video & media files
+*.mp4
+*.avi
+*.mkv
+*.mov
+*.flv
+*.wmv
+*.webm
+*.zip
+*.tar
+*.gz
+
+# Model weights (uncomment if not committing weights)
+# *.pt
+# *.onnx
