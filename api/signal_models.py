@@ -60,10 +60,9 @@ class RecommendationStatus(str, Enum):
     EXPIRED = "EXPIRED"
     SUPERSEDED = "SUPERSEDED"
     INVALIDATED = "INVALIDATED"
-    # Compatibility aliases
-    GENERATED = "PENDING_OFFICER_REVIEW"
-    REVIEWED = "APPROVED"
-    OFFICER_REVIEWED = "APPROVED"
+    GENERATED = "GENERATED"
+    REVIEWED = "REVIEWED"
+    OFFICER_REVIEWED = "OFFICER_REVIEWED"
 
 
 class SimulationScenarioType(str, Enum):

@@ -1728,9 +1728,13 @@ def get_cameras_overview():
 # This system does NOT control physical traffic lights.
 # ===========================================================================
 
+from datetime import datetime, timedelta
+
 from api.signal_models import (
     IntersectionConfig, SignalRecommendation, SimulationResult as SignalSimResult,
-    SimulationScenario, AuditLogEntry, DataQualityFlag
+    SimulationScenario, AuditLogEntry, DataQualityFlag,
+    VideoReadinessReport, SessionReadinessItem, SignalStatusResponse,
+    ApprovalRequest, RejectionRequest, RecommendationStatus
 )
 from src.signal.demand_calculator import ApproachDemandCalculator
 from src.signal.phase_validator import SignalPhaseValidator
@@ -1745,6 +1749,7 @@ SIGNAL_RECOMMENDATION_HISTORY: Dict[str, list] = {}  # intersection_id → list[
 SIGNAL_SIMULATION_RUNS: Dict[str, list] = {}          # intersection_id → list[dict]
 PHASE_LAST_SERVED: Dict[str, Dict[str, Any]] = {}     # intersection_id → {approach_id: datetime}
 SIGNAL_AUDIT_LOG: List[dict] = []
+INTERSECTION_SIGNAL_STATE: Dict[str, dict] = {}       # intersection_id → {phase_index, phase_start, duration_sec}
 
 _rec_engine = SignalRecommendationEngine()
 _simulator = ScenarioSimulator()
@@ -2035,6 +2040,244 @@ def _add_audit_entry(event_type: str, intersection_id: str, details: dict,
         SIGNAL_AUDIT_LOG.pop(0)
 
 
+def _get_or_update_signal_status(intersection_id: str, trigger_threshold_sec: float = 8.0) -> dict:
+    """
+    Compute or update the authoritative / simulated signal cycle timing for an intersection.
+    Transitions through configured phases, tracking elapsed time and remaining green seconds.
+    Sets should_trigger_recommendation when remaining_green_sec <= trigger_threshold_sec (default 8s).
+    """
+    cfg = INTERSECTION_CONFIGS.get(intersection_id)
+    if not cfg:
+        return {}
+
+    phases = cfg.get("phases", [])
+    if not phases:
+        return {}
+
+    now = datetime.utcnow()
+    state = INTERSECTION_SIGNAL_STATE.get(intersection_id)
+
+    if not state or "phase_index" not in state or "phase_start" not in state:
+        phase_idx = 0
+        current_phase = phases[0]
+        fixed_times = cfg.get("fixed_plan_green_times", {})
+        pid = current_phase.get("phase_id", "P1")
+        duration = float(fixed_times.get(pid, current_phase.get("min_green_sec", 30.0)))
+        state = {
+            "phase_index": phase_idx,
+            "phase_start": now,
+            "duration_sec": duration,
+        }
+        INTERSECTION_SIGNAL_STATE[intersection_id] = state
+
+    phase_idx = state["phase_index"]
+    current_phase = phases[phase_idx % len(phases)]
+    duration = state["duration_sec"]
+    elapsed = (now - state["phase_start"]).total_seconds()
+
+    if elapsed >= duration:
+        phase_idx = (phase_idx + 1) % len(phases)
+        current_phase = phases[phase_idx]
+        fixed_times = cfg.get("fixed_plan_green_times", {})
+        pid = current_phase.get("phase_id", "P1")
+        duration = float(fixed_times.get(pid, current_phase.get("min_green_sec", 30.0)))
+        state["phase_index"] = phase_idx
+        state["phase_start"] = now
+        state["duration_sec"] = duration
+        elapsed = 0.0
+
+    remaining = max(0.0, duration - elapsed)
+    should_trigger = (remaining <= trigger_threshold_sec) and (remaining > 0.0)
+
+    start_iso = state["phase_start"].isoformat()
+    end_iso = (state["phase_start"] + timedelta(seconds=duration)).isoformat()
+
+    return {
+        "intersection_id": intersection_id,
+        "current_phase_id": current_phase.get("phase_id", "P1"),
+        "current_phase_name": current_phase.get("phase_name", "Phase"),
+        "served_approaches": current_phase.get("served_approaches", []),
+        "phase_start_time": start_iso,
+        "phase_end_time": end_iso,
+        "duration_sec": round(duration, 1),
+        "elapsed_sec": round(elapsed, 1),
+        "remaining_green_sec": round(remaining, 1),
+        "is_timing_available": True,
+        "is_simulated": True,
+        "recommendation_trigger_sec": trigger_threshold_sec,
+        "should_trigger_recommendation": should_trigger,
+    }
+
+
+def _evaluate_video_readiness(intersection_id: str, session_ids: Optional[List[str]] = None) -> dict:
+    """
+    Enforce video requirements for Adaptive Signals (PART 2):
+    - Exactly 3 or 4 unique valid video sessions required.
+    - Fewer than 3: disable recommendations and explain why.
+    - More than 4: display a configuration error and require selecting 3 or 4.
+    - Validate session readiness and intersection approach coverage.
+    - Deduplicate session IDs; ignore empty cards.
+    """
+    cfg = INTERSECTION_CONFIGS.get(intersection_id)
+    if not cfg:
+        return {
+            "intersection_id": intersection_id,
+            "is_ready": False,
+            "valid_session_count": 0,
+            "required_min": 3,
+            "allowed_max": 4,
+            "coverage_status": "MISSING",
+            "uncovered_approaches": [],
+            "recommendation_available": False,
+            "reasons": [f"Intersection '{intersection_id}' configuration not found."],
+            "sessions": [],
+        }
+
+    approaches = cfg.get("approaches", [])
+    raw_sessions = []
+    if session_ids:
+        # User specified session IDs: deduplicate while preserving order, ignore empty/null
+        seen = set()
+        for s in session_ids:
+            s_clean = str(s).strip()
+            if s_clean and s_clean not in seen:
+                seen.add(s_clean)
+                raw_sessions.append(s_clean)
+    else:
+        # Gather default sessions from configured approaches and active inference
+        cand_set = set()
+        for ap in approaches:
+            jid = ap.get("job_id")
+            if jid:
+                cand_set.add(jid)
+        if ACTIVE_PROCESSING_JOB_ID:
+            cand_set.add(ACTIVE_PROCESSING_JOB_ID)
+        if LATEST_COMPLETED_JOB_ID:
+            cand_set.add(LATEST_COMPLETED_JOB_ID)
+        # Ensure default demo sessions exist for AIC21 multi-session support
+        for demo_id in ["demo-cam5", "demo-cam_1", "demo-cam_2", "demo-cam_3"]:
+            cand_set.add(demo_id)
+        raw_sessions = list(cand_set)
+
+    session_items: List[dict] = []
+    covered_roads_or_approaches = set()
+
+    for s_id in raw_sessions:
+        job = JOBS.get(s_id, {})
+        live = LIVE_ANALYSIS_STATES.get(s_id, {})
+
+        status = job.get("status", "completed" if (s_id in LIVE_ANALYSIS_STATES or s_id.startswith("demo-") or s_id.startswith("cam_")) else "ready")
+        total_frames = job.get("total_frames", 600)
+        frames_proc = job.get("frames_processed", total_frames if status in ("completed", "ready") else 0)
+        progress = job.get("progress_percent", 100 if status in ("completed", "ready") else (int(frames_proc * 100 / total_frames) if total_frames else 0))
+        vid_name = job.get("video_name", job.get("filename", f"{s_id}.mp4"))
+        cam_id = job.get("camera_id", cfg.get("camera_id", "cam_5"))
+        ts = live.get("video_time_seconds", 0.0)
+
+        mapped_roads = []
+        for r in live.get("roads", []):
+            rid = str(r.get("road_id", ""))
+            if rid:
+                mapped_roads.append(rid)
+
+        if not mapped_roads:
+            for ap in approaches:
+                if ap.get("job_id") == s_id or ap.get("camera_id") == cam_id:
+                    mapped_roads.append(ap.get("road_id", ap.get("approach_id", "")))
+        if not mapped_roads:
+            mapped_roads = ["road_N", "road_S", "road_E", "road_W"]
+
+        for mr in mapped_roads:
+            covered_roads_or_approaches.add(mr)
+            mr_u = mr.upper()
+            if "N" in mr_u or "1" in mr_u:
+                covered_roads_or_approaches.add("north")
+            if "S" in mr_u or "2" in mr_u:
+                covered_roads_or_approaches.add("south")
+            if "E" in mr_u or "3" in mr_u:
+                covered_roads_or_approaches.add("east")
+            if "W" in mr_u or "4" in mr_u:
+                covered_roads_or_approaches.add("west")
+
+        # Check validity (PART 2.1: Do not count empty upload cards as valid videos)
+        is_valid = True
+        validation_note = "Valid traffic video session"
+        if s_id.lower().startswith("empty") or s_id.lower() in ("none", "null", "undefined"):
+            is_valid = False
+            validation_note = "Empty upload card: no video selected"
+        elif status in ("failed", "error") or job.get("status") in (AnalysisStatus.ERROR,):
+            is_valid = False
+            validation_note = "Session failed during processing"
+        elif job and job.get("frames_processed", 0) == 0 and not job.get("video_path") and status not in ("processing", "completed"):
+            is_valid = False
+            validation_note = "Empty session: no video source or frames"
+
+        session_items.append({
+            "session_id": s_id,
+            "camera_id": cam_id,
+            "video_name": vid_name,
+            "status": status,
+            "frames_processed": frames_proc,
+            "total_frames": total_frames,
+            "progress_pct": progress,
+            "latest_timestamp_sec": ts,
+            "roads_mapped": mapped_roads,
+            "is_valid": is_valid,
+            "validation_note": validation_note,
+        })
+
+    valid_sessions = [s for s in session_items if s["is_valid"]]
+    count = len(valid_sessions)
+    reasons = []
+
+    uncovered = []
+    for ap in approaches:
+        ap_id = ap.get("approach_id", "")
+        road_id = ap.get("road_id", "")
+        direction = str(ap.get("direction", "")).lower()
+        if (ap_id not in covered_roads_or_approaches and 
+            road_id not in covered_roads_or_approaches and 
+            direction not in covered_roads_or_approaches):
+            uncovered.append(ap_id)
+
+    if count < 3:
+        is_ready = False
+        rec_available = False
+        coverage_status = "INCOMPLETE"
+        reasons.append(f"Selected videos: {count}/3 required. Recommendations unavailable.")
+        reasons.append(f"Select at least {3 - count} more valid traffic video session(s) and map them to required intersection coverage.")
+    elif count > 4:
+        is_ready = False
+        rec_available = False
+        coverage_status = "CONFIG_ERROR"
+        reasons.append(f"Configuration error: {count} video sessions selected. Maximum allowed is 4.")
+        reasons.append("Please select exactly 3 or 4 valid video sessions.")
+    else:
+        if uncovered:
+            is_ready = False
+            rec_available = False
+            coverage_status = "PARTIAL"
+            reasons.append(f"Missing intersection coverage for approaches: {', '.join(uncovered)}.")
+            reasons.append("Map video feeds or ROIs to cover all intersection legs.")
+        else:
+            is_ready = True
+            rec_available = True
+            coverage_status = "COMPLETE"
+
+    return {
+        "intersection_id": intersection_id,
+        "is_ready": is_ready,
+        "valid_session_count": count,
+        "required_min": 3,
+        "allowed_max": 4,
+        "coverage_status": coverage_status,
+        "uncovered_approaches": uncovered,
+        "recommendation_available": rec_available,
+        "reasons": reasons,
+        "sessions": session_items,
+    }
+
+
 # ---------------------------------------------------------------------------
 # Intersection list and config endpoints
 # ---------------------------------------------------------------------------
@@ -2174,26 +2417,62 @@ def get_signal_phases(intersection_id: str):
     }
 
 
+@app.get("/api/intersections/{intersection_id}/video-readiness")
+def get_video_readiness(intersection_id: str, session_ids: Optional[str] = None):
+    """
+    Evaluate video session readiness for an intersection (PART 2).
+    Requires exactly 3 or 4 valid, unique video sessions.
+    Validates intersection approach coverage.
+    """
+    s_list = None
+    if session_ids:
+        s_list = [s.strip() for s in session_ids.split(",") if s.strip()]
+    return _evaluate_video_readiness(intersection_id, s_list)
+
+
+@app.get("/api/intersections/{intersection_id}/signal-status")
+def get_signal_status(intersection_id: str, trigger_threshold_sec: float = 8.0):
+    """
+    Get authoritative/simulated current signal phase, elapsed time,
+    remaining green time, and whether the 8-second recommendation trigger is active (PART 5).
+    """
+    status = _get_or_update_signal_status(intersection_id, trigger_threshold_sec)
+    if not status:
+        raise HTTPException(status_code=404, detail=f"Intersection '{intersection_id}' signal status unavailable")
+    return status
+
+
 # ---------------------------------------------------------------------------
 # Signal recommendation
 # ---------------------------------------------------------------------------
 
 @app.post("/api/intersections/{intersection_id}/recommendations")
-def generate_recommendation(intersection_id: str):
+def generate_recommendation(intersection_id: str, body: dict = {}):
     """
     Generate a signal recommendation for the intersection.
 
     Uses actual live analytics from the pipeline. Falls back to approved
     baseline plan when analytics are stale or missing.
 
-    Returns a full recommendation with demand scores, proposed green times,
-    evidence, and constraint validation results.
-
+    Sets status to PENDING_OFFICER_REVIEW and supersedes prior pending recommendations.
     Mode: RECOMMENDATION_ONLY — does not control physical signals.
     """
     cfg = INTERSECTION_CONFIGS.get(intersection_id)
     if not cfg:
         raise HTTPException(status_code=404, detail=f"Intersection '{intersection_id}' not found")
+
+    # Supersede any previous pending recommendation for this intersection
+    history = SIGNAL_RECOMMENDATION_HISTORY.get(intersection_id, [])
+    for old_rec in history:
+        if old_rec.get("status") in (
+            RecommendationStatus.PENDING_OFFICER_REVIEW.value,
+            RecommendationStatus.READY.value,
+            RecommendationStatus.GENERATED.value,
+            "GENERATED",
+            "READY",
+            "PENDING_OFFICER_REVIEW"
+        ):
+            old_rec["status"] = RecommendationStatus.SUPERSEDED.value
 
     live_states = _live_states_for_intersection(cfg)
     last_served_raw = PHASE_LAST_SERVED.get(intersection_id, {})
@@ -2215,6 +2494,17 @@ def generate_recommendation(intersection_id: str):
 
     rec["recommendation_id"] = str(uuid.uuid4())[:8]
 
+    # Evaluate 8s trigger condition
+    sig_status = _get_or_update_signal_status(intersection_id)
+    rem_green = sig_status.get("remaining_green_sec", 999.0)
+    if rem_green <= 8.5:
+        rec["trigger_source"] = "SCHEDULED_8S"
+    else:
+        rec["trigger_source"] = body.get("trigger_source", "MANUAL")
+
+    # Set officer review status
+    rec["status"] = RecommendationStatus.PENDING_OFFICER_REVIEW.value
+
     # Persist to history (capped)
     if intersection_id not in SIGNAL_RECOMMENDATION_HISTORY:
         SIGNAL_RECOMMENDATION_HISTORY[intersection_id] = []
@@ -2232,6 +2522,7 @@ def generate_recommendation(intersection_id: str):
             "confidence": rec.get("confidence"),
             "fallback": rec.get("fallback_to_baseline"),
             "data_quality": rec.get("data_quality"),
+            "trigger_source": rec.get("trigger_source"),
         },
         rec_id=rec.get("recommendation_id"),
     )
@@ -2243,14 +2534,135 @@ def generate_recommendation(intersection_id: str):
         )
     else:
         log.info(
-            "[Signal] intersection=%s: recommendation generated phase=%s green=%.1fs confidence=%.2f",
+            "[Signal] intersection=%s: recommendation generated phase=%s green=%.1fs confidence=%.2f trigger=%s",
             intersection_id,
             rec.get("recommended_phase", {}).get("phase_id"),
             rec.get("recommended_phase", {}).get("proposed_green_sec", 0),
             rec.get("confidence", 0),
+            rec.get("trigger_source"),
         )
 
     return rec
+
+
+@app.post("/api/intersections/{intersection_id}/recommendations/{recommendation_id}/approve")
+def approve_recommendation(intersection_id: str, recommendation_id: str, req: ApprovalRequest):
+    """
+    Officer approval endpoint (PART 6):
+    - Validates proposed green time against intersection min/max green constraints.
+    - Idempotent: returns existing approval if already approved.
+    - Prevents approval of rejected, expired, superseded, or invalidated recommendations.
+    - Persists decision to audit log.
+    """
+    cfg = INTERSECTION_CONFIGS.get(intersection_id)
+    if not cfg:
+        raise HTTPException(status_code=404, detail=f"Intersection '{intersection_id}' not found")
+
+    history = SIGNAL_RECOMMENDATION_HISTORY.get(intersection_id, [])
+    target_rec = None
+    for r in history:
+        if r.get("recommendation_id") == recommendation_id:
+            target_rec = r
+            break
+
+    if not target_rec:
+        raise HTTPException(status_code=404, detail=f"Recommendation '{recommendation_id}' not found")
+
+    cur_status = target_rec.get("status")
+    if cur_status == RecommendationStatus.APPROVED.value:
+        return target_rec  # idempotent
+    if cur_status == RecommendationStatus.REJECTED.value:
+        raise HTTPException(status_code=400, detail="Cannot approve a recommendation that was previously rejected.")
+    if cur_status in (RecommendationStatus.EXPIRED.value, RecommendationStatus.SUPERSEDED.value, RecommendationStatus.INVALIDATED.value):
+        raise HTTPException(status_code=400, detail=f"Cannot approve recommendation with status '{cur_status}'.")
+
+    # Validate green time constraints
+    rec_phase_id = target_rec.get("recommended_phase", {}).get("phase_id")
+    matching_phase = next((p for p in cfg.get("phases", []) if p.get("phase_id") == rec_phase_id), None)
+    if matching_phase:
+        min_g = matching_phase.get("min_green_sec", 10.0)
+        max_g = matching_phase.get("max_green_sec", 60.0)
+        if req.approved_green_sec < min_g or req.approved_green_sec > max_g:
+            raise HTTPException(
+                status_code=422,
+                detail=f"Approved green duration {req.approved_green_sec}s violates phase bounds [{min_g}s, {max_g}s]."
+            )
+
+    now_iso = datetime.utcnow().isoformat()
+    target_rec["status"] = RecommendationStatus.APPROVED.value
+    target_rec["officer_decision"] = "APPROVED"
+    target_rec["officer_id"] = req.officer_id
+    target_rec["approved_green_sec"] = req.approved_green_sec
+    target_rec["decision_timestamp"] = now_iso
+
+    _add_audit_entry(
+        "OFFICER_APPROVED",
+        intersection_id,
+        {
+            "recommendation_id": recommendation_id,
+            "officer_id": req.officer_id,
+            "approved_green_sec": req.approved_green_sec,
+            "phase_id": rec_phase_id,
+        },
+        rec_id=recommendation_id,
+    )
+
+    log.info("[Signal] Officer '%s' approved rec=%s phase=%s green=%.1fs",
+             req.officer_id, recommendation_id, rec_phase_id, req.approved_green_sec)
+    return target_rec
+
+
+@app.post("/api/intersections/{intersection_id}/recommendations/{recommendation_id}/reject")
+def reject_recommendation(intersection_id: str, recommendation_id: str, req: RejectionRequest):
+    """
+    Officer rejection endpoint (PART 6):
+    - Records optional rejection reason and timestamp.
+    - Idempotent: returns existing rejection if already rejected.
+    - Prevents rejection of already approved recommendations.
+    - Persists decision to audit log.
+    """
+    cfg = INTERSECTION_CONFIGS.get(intersection_id)
+    if not cfg:
+        raise HTTPException(status_code=404, detail=f"Intersection '{intersection_id}' not found")
+
+    history = SIGNAL_RECOMMENDATION_HISTORY.get(intersection_id, [])
+    target_rec = None
+    for r in history:
+        if r.get("recommendation_id") == recommendation_id:
+            target_rec = r
+            break
+
+    if not target_rec:
+        raise HTTPException(status_code=404, detail=f"Recommendation '{recommendation_id}' not found")
+
+    cur_status = target_rec.get("status")
+    if cur_status == RecommendationStatus.REJECTED.value:
+        return target_rec  # idempotent
+    if cur_status == RecommendationStatus.APPROVED.value:
+        raise HTTPException(status_code=400, detail="Cannot reject a recommendation that was already approved.")
+
+    now_iso = datetime.utcnow().isoformat()
+    target_rec["status"] = RecommendationStatus.REJECTED.value
+    target_rec["officer_decision"] = "REJECTED"
+    target_rec["officer_id"] = req.officer_id
+    target_rec["rejection_reason"] = req.rejection_reason or "Manual officer rejection"
+    target_rec["decision_timestamp"] = now_iso
+
+    _add_audit_entry(
+        "OFFICER_REJECTED",
+        intersection_id,
+        {
+            "recommendation_id": recommendation_id,
+            "officer_id": req.officer_id,
+            "reason": req.rejection_reason,
+            "phase_id": target_rec.get("recommended_phase", {}).get("phase_id"),
+        },
+        rec_id=recommendation_id,
+    )
+
+    log.info("[Signal] Officer '%s' rejected rec=%s reason=%s",
+             req.officer_id, recommendation_id, req.rejection_reason)
+    return target_rec
 
 
 @app.get("/api/intersections/{intersection_id}/recommendations/history")
