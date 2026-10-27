@@ -1,0 +1,124 @@
+counting:
+  count_trigger: roi_exit
+  min_confidence: 0.35
+  min_track_length: 5
+  prevent_recount: true
+detection:
+  car_coco_ids:
+  - 2
+  - 5
+  confidence_threshold: 0.35
+  input_size: 640
+  iou_threshold: 0.45
+  model: yolov8n
+  model_path: null
+  motorcycle_coco_ids:
+  - 3
+  pretrained_weights: yolov8n.pt
+  target_coco_classes:
+  - 2
+  - 5
+  - 7
+  truck_coco_ids:
+  - 7
+evaluation:
+  counting_metrics:
+  - MAE
+  - RMSE
+  - accuracy
+  eval_camera: cam_5
+  eval_duration_frames: 600
+  gt_csv: C:/Users/haras/Desktop/openhack/AIC21_Track1_Vehicle_Counting/counting_gt_sample/counting_example_cam_5_1min.csv
+hardware:
+  device: cuda
+  gpu_vram_gb: 4.0
+  num_workers: 4
+inference:
+  annotated_video_fps: 10
+  frame_skip: 0
+  max_frames: 600
+  metrics_output_dir: C:/Users/haras/Desktop/openhack/traffic_ml/outputs/metrics
+  save_annotated_video: false
+  save_json_results: true
+  video_output_dir: C:/Users/haras/Desktop/openhack/traffic_ml/outputs/videos
+intelligence:
+  direction_imbalance:
+    enabled: true
+    imbalance_threshold: 3.0
+  mechanism: traffic_state_estimation
+  thresholds:
+    critical_flow_rate: 25.0
+    high_flow_rate: 15.0
+    low_flow_rate: 2.0
+    medium_flow_rate: 8.0
+  time_window_seconds: 60
+logging:
+  level: INFO
+  log_dir: C:/Users/haras/Desktop/openhack/traffic_ml/reports
+movement:
+  exit_boundary_margin: 20
+  method: trajectory_roi_exit
+  min_track_length: 5
+paths:
+  dataset_root: C:/Users/haras/Desktop/openhack/AIC21_Track1_Vehicle_Counting
+  gt_dir: C:/Users/haras/Desktop/openhack/AIC21_Track1_Vehicle_Counting/counting_gt_sample
+  models_dir: C:/Users/haras/Desktop/openhack/traffic_ml/models
+  movement_dir: C:/Users/haras/Desktop/openhack/AIC21_Track1_Vehicle_Counting/movement_description
+  outputs_dir: C:/Users/haras/Desktop/openhack/traffic_ml/outputs
+  project_root: C:/Users/haras/Desktop/openhack/traffic_ml
+  reports_dir: C:/Users/haras/Desktop/openhack/traffic_ml/reports
+  roi_dir: C:/Users/haras/Desktop/openhack/AIC21_Track1_Vehicle_Counting/ROIs
+  video_dir: C:/Users/haras/Desktop/openhack/AIC21_Track1_Vehicle_Counting/Dataset_A
+project:
+  dataset: AIC21 Track 1
+  name: TrafficTwin
+  version: 1.0.0
+tracking:
+  match_thresh: 0.8
+  new_track_thresh: 0.4
+  track_buffer: 30
+  track_high_thresh: 0.35
+  track_low_thresh: 0.1
+  tracker: bytetrack
+visualization:
+  bbox_thickness: 2
+  colors:
+    car:
+    - 0
+    - 255
+    - 0
+    roi:
+    - 255
+    - 255
+    - 0
+    traffic_CRITICAL:
+    - 128
+    - 0
+    - 128
+    traffic_HIGH:
+    - 0
+    - 0
+    - 255
+    traffic_LOW:
+    - 0
+    - 255
+    - 0
+    traffic_MEDIUM:
+    - 0
+    - 165
+    - 255
+    truck:
+    - 0
+    - 165
+    - 255
+    unknown:
+    - 200
+    - 200
+    - 200
+  font_scale: 0.6
+  show_bbox: true
+  show_class: true
+  show_movement: true
+  show_roi: true
+  show_track_id: true
+  show_traffic_state: true

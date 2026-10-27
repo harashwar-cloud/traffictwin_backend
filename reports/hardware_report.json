@@ -1,0 +1,77 @@
+{
+  "inspection_timestamp": "2026-08-20T22:15:18+05:30",
+  "system": {
+    "os": "Windows 10 (Build 26200)",
+    "architecture": "x86_64 (AMD64)"
+  },
+  "cpu": {
+    "vendor": "GenuineIntel",
+    "family": "Intel64 Family 6 Model 154 Stepping 3",
+    "physical_cores": 8,
+    "logical_cores": 12,
+    "max_freq_mhz": 2000
+  },
+  "memory": {
+    "total_ram_gb": 15.68,
+    "available_ram_gb": 5.42,
+    "notes": "Approximately 10 GB used at inspection time"
+  },
+  "gpu": {
+    "name": "NVIDIA GeForce RTX 3050 Laptop GPU",
+    "vram_gb": 4.0,
+    "vram_free_gb": 3.65,
+    "cuda_available": true,
+    "cuda_version": "12.1",
+    "driver_version": "595.71",
+    "compute_capability": "8.6",
+    "notes": "Limited VRAM (4 GB). Must use lightweight models and avoid large batch sizes."
+  },
+  "storage": {
+    "drive": "D:",
+    "total_gb": 281.6,
+    "used_gb": 82.2,
+    "free_gb": 199.5,
+    "dataset_size_gb": 5.43,
+    "notes": "Sufficient free space. Do not duplicate raw dataset."
+  },
+  "python": {
+    "version": "3.10.0rc2",
+    "implementation": "CPython (MSC v.1929 64-bit)"
+  },
+  "key_packages": {
+    "torch": "2.5.1+cu121",
+    "torchvision": "0.20.1+cu121",
+    "ultralytics": "8.4.21",
+    "opencv-python": "4.13.0.92",
+    "opencv-contrib-python": "5.0.0.93",
+    "numpy": "2.2.6",
+    "pandas": "2.3.3",
+    "scikit-learn": "1.7.2",
+    "scipy": "1.15.3",
+    "matplotlib": "3.10.8",
+    "flask": "3.1.3",
+    "streamlit": "1.59.2",
+    "easyocr": "1.7.2",
+    "shapely": "2.1.2",
+    "lap": "0.5.13",
+    "xgboost": "3.2.0",
+    "tqdm": "4.67.3",
+    "pyyaml": "6.0.3",
+    "psutil": "7.2.2"
+  },
+  "missing_packages": {
+    "fastapi": "NOT installed - needs pip install fastapi",
+    "filterpy": "NOT installed - needed for SORT tracker",
+    "motmetrics": "NOT installed - needed for MOTA/IDF1 eval"
+  },
+  "existing_model_files": {
+    "yolov8n.pt": "C:\\Users\\haras\\Desktop\\openhack\\traffic_ml--main\\yolov8n.pt",
+    "yolo26n.pt": "C:\\Users\\haras\\Desktop\\openhack\\traffic_ml--main\\yolo26n.pt",
+    "notes": "YOLOv8n already present on disk. Use this to avoid re-download."
+  },
+  "hardware_constraints": {
+    "gpu_vram_limit": "4 GB VRAM - use YOLOv8n or YOLOv8s, not YOLOv8m/l/x",
+    "ram_limit": "~5 GB free RAM - avoid loading full video into memory",
+    "recommendation": "Process videos frame-by-frame. Use GPU for inference. Cache intermediate results."
+  }
+}

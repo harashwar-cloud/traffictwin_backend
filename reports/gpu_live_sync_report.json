@@ -1,0 +1,175 @@
+{
+  "hardware": {
+    "gpu_name": "NVIDIA GeForce RTX 3050 Laptop GPU",
+    "cuda_available": true,
+    "torch_version": "2.5.1+cu121"
+  },
+  "performance": {
+    "total_frames": 600,
+    "duration_sec": 60.0,
+    "processing_time_sec": 26.6,
+    "processing_fps": 22.6,
+    "realtime_factor": 2.26
+  },
+  "live_sync_checkpoints": {
+    "1": {
+      "frame_count": 1,
+      "frame_id": 0,
+      "timestamp_sec": 0.0,
+      "vehicles_counted": 9,
+      "classes": {
+        "Car": 9,
+        "Truck": 0
+      },
+      "movement_counts": {},
+      "traffic_state": "LOW",
+      "arrival_rate": 180.0,
+      "queue": 75,
+      "fps": 0.9
+    },
+    "100": {
+      "frame_count": 100,
+      "frame_id": 99,
+      "timestamp_sec": 9.9,
+      "vehicles_counted": 32,
+      "classes": {
+        "Car": 32,
+        "Truck": 0
+      },
+      "movement_counts": {
+        "7": 5,
+        "6": 2,
+        "9": 9
+      },
+      "traffic_state": "HIGH",
+      "arrival_rate": 193.9,
+      "queue": 81,
+      "fps": 36.2
+    },
+    "200": {
+      "frame_count": 200,
+      "frame_id": 199,
+      "timestamp_sec": 19.9,
+      "vehicles_counted": 46,
+      "classes": {
+        "Car": 46,
+        "Truck": 0
+      },
+      "movement_counts": {
+        "7": 5,
+        "6": 2,
+        "9": 14,
+        "4": 1
+      },
+      "traffic_state": "HIGH",
+      "arrival_rate": 138.7,
+      "queue": 58,
+      "fps": 33.9
+    },
+    "300": {
+      "frame_count": 300,
+      "frame_id": 299,
+      "timestamp_sec": 29.9,
+      "vehicles_counted": 66,
+      "classes": {
+        "Car": 66,
+        "Truck": 0
+      },
+      "movement_counts": {
+        "7": 5,
+        "6": 2,
+        "9": 26,
+        "4": 2,
+        "8": 1
+      },
+      "traffic_state": "CRITICAL",
+      "arrival_rate": 132.4,
+      "queue": 55,
+      "fps": 31.8
+    },
+    "400": {
+      "frame_count": 400,
+      "frame_id": 399,
+      "timestamp_sec": 39.9,
+      "vehicles_counted": 90,
+      "classes": {
+        "Car": 90,
+        "Truck": 0
+      },
+      "movement_counts": {
+        "7": 5,
+        "6": 2,
+        "9": 31,
+        "4": 9,
+        "8": 2,
+        "10": 1
+      },
+      "traffic_state": "CRITICAL",
+      "arrival_rate": 135.3,
+      "queue": 56,
+      "fps": 28.5
+    },
+    "500": {
+      "frame_count": 500,
+      "frame_id": 499,
+      "timestamp_sec": 49.9,
+      "vehicles_counted": 114,
+      "classes": {
+        "Car": 113,
+        "Truck": 1
+      },
+      "movement_counts": {
+        "7": 5,
+        "6": 2,
+        "9": 41,
+        "4": 16,
+        "8": 4,
+        "10": 1
+      },
+      "traffic_state": "CRITICAL",
+      "arrival_rate": 137.1,
+      "queue": 57,
+      "fps": 32.3
+    },
+    "600": {
+      "frame_count": 600,
+      "frame_id": 599,
+      "timestamp_sec": 59.9,
+      "vehicles_counted": 137,
+      "classes": {
+        "Car": 135,
+        "Truck": 2
+      },
+      "movement_counts": {
+        "7": 5,
+        "6": 2,
+        "9": 41,
+        "4": 25,
+        "8": 4,
+        "10": 1
+      },
+      "traffic_state": "CRITICAL",
+      "arrival_rate": 137.2,
+      "queue": 57,
+      "fps": 28.7
+    }
+  },
+  "final_metrics": {
+    "total_vehicles": 137,
+    "vehicle_classes": {
+      "Car": 135,
+      "Truck": 2
+    },
+    "movement_counts": {
+      "7": 5,
+      "6": 2,
+      "9": 41,
+      "4": 25,
+      "8": 4,
+      "10": 1
+    },
+    "traffic_state": "CRITICAL",
+    "flow_rate_per_min": 78.0,
+    "direction_imbalance_ratio": 41.0
+  }
+}

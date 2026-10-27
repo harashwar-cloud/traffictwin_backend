@@ -1,0 +1,1645 @@
+{
+  "inspection_timestamp": "2026-08-20T22:30:49",
+  "dataset": {
+    "name": "AIC21 Track 1 \u2014 Multi-Class Multi-Movement Vehicle Counting",
+    "source": "https://www.aicitychallenge.org/",
+    "root": "C:\\Users\\haras\\Desktop\\openhack\\AIC21_Track1_Vehicle_Counting",
+    "subset": "Dataset_A (5 hours)"
+  },
+  "summary": {
+    "total_video_files": 31,
+    "total_video_ids_in_list": 31,
+    "unique_cameras": 20,
+    "total_size_bytes": 5740341325,
+    "total_size_gb": 5.346,
+    "total_frames": 185446,
+    "total_duration_seconds": 17914.6,
+    "total_duration_hours": 4.98,
+    "fps_values_present": [
+      "8",
+      "10",
+      "15"
+    ],
+    "resolutions_seen": [
+      "1280x720",
+      "1280x960",
+      "1920x1080",
+      "2560x1920"
+    ],
+    "corrupted_files": [],
+    "unreadable_files": [],
+    "duplicate_files": [],
+    "gt_note": "Only counting GT for cam_5 first 1 minute (600 frames) is publicly released."
+  },
+  "vehicle_classes": {
+    "1": "Car",
+    "2": "Truck"
+  },
+  "lighting_conditions": {
+    "normal": [
+      "cam_1.mp4",
+      "cam_2.mp4",
+      "cam_3.mp4",
+      "cam_4.mp4",
+      "cam_5.mp4",
+      "cam_6.mp4",
+      "cam_7.mp4",
+      "cam_8.mp4",
+      "cam_9.mp4",
+      "cam_10.mp4",
+      "cam_11.mp4",
+      "cam_12.mp4",
+      "cam_13.mp4",
+      "cam_14.mp4",
+      "cam_15.mp4",
+      "cam_16.mp4",
+      "cam_17.mp4",
+      "cam_18.mp4",
+      "cam_19.mp4",
+      "cam_20.mp4"
+    ],
+    "dawn": [
+      "cam_1_dawn.mp4",
+      "cam_4_dawn.mp4",
+      "cam_5_dawn.mp4",
+      "cam_7_dawn.mp4"
+    ],
+    "rain": [
+      "cam_1_rain.mp4",
+      "cam_2_rain.mp4",
+      "cam_3_rain.mp4",
+      "cam_4_rain.mp4",
+      "cam_5_rain.mp4",
+      "cam_7_rain.mp4"
+    ],
+    "snow": [
+      "cam_6_snow.mp4"
+    ]
+  },
+  "cameras": {
+    "cam_1": {
+      "camera_id": "cam_1",
+      "videos": [
+        "cam_1.mp4",
+        "cam_1_dawn.mp4",
+        "cam_1_rain.mp4"
+      ],
+      "intersection_type": "highway on ramp, off ramp and normal segments",
+      "camera_type": "normal camera",
+      "num_movements": 4,
+      "roi_vertices": 5
+    },
+    "cam_10": {
+      "camera_id": "cam_10",
+      "videos": [
+        "cam_10.mp4"
+      ],
+      "intersection_type": "Intersection Single Approach with separate right-turning lane and separate left-turning lane",
+      "camera_type": "normal camera",
+      "num_movements": 3,
+      "roi_vertices": 4
+    },
+    "cam_11": {
+      "camera_id": "cam_11",
+      "videos": [
+        "cam_11.mp4"
+      ],
+      "intersection_type": "Intersection Single Approach with separate right-turning lane and separate left-turning lane",
+      "camera_type": "normal camera",
+      "num_movements": 3,
+      "roi_vertices": 4
+    },
+    "cam_12": {
+      "camera_id": "cam_12",
+      "videos": [
+        "cam_12.mp4"
+      ],
+      "intersection_type": "Intersection Single Approach with shared right-turning lane and separate left-turning lane",
+      "camera_type": "normal camera",
+      "num_movements": 3,
+      "roi_vertices": 5
+    },
+    "cam_13": {
+      "camera_id": "cam_13",
+      "videos": [
+        "cam_13.mp4"
+      ],
+      "intersection_type": "Intersection Single Approach with shared right-turning lane and separate left-turning lane",
+      "camera_type": "normal camera",
+      "num_movements": 3,
+      "roi_vertices": 4
+    },
+    "cam_14": {
+      "camera_id": "cam_14",
+      "videos": [
+        "cam_14.mp4"
+      ],
+      "intersection_type": "city street without on-street parking",
+      "camera_type": "normal camera, tilted view",
+      "num_movements": 2,
+      "roi_vertices": 4
+    },
+    "cam_15": {
+      "camera_id": "cam_15",
+      "videos": [
+        "cam_15.mp4"
+      ],
+      "intersection_type": "city street without on-street parking",
+      "camera_type": "normal camera",
+      "num_movements": 2,
+      "roi_vertices": 5
+    },
+    "cam_16": {
+      "camera_id": "cam_16",
+      "videos": [
+        "cam_16.mp4"
+      ],
+      "intersection_type": "city street with on-street parking",
+      "camera_type": "normal camera",
+      "num_movements": 2,
+      "roi_vertices": 4
+    },
+    "cam_17": {
+      "camera_id": "cam_17",
+      "videos": [
+        "cam_17.mp4"
+      ],
+      "intersection_type": "city street with on-street parking",
+      "camera_type": "normal camera",
+      "num_movements": 2,
+      "roi_vertices": 4
+    },
+    "cam_18": {
+      "camera_id": "cam_18",
+      "videos": [
+        "cam_18.mp4"
+      ],
+      "intersection_type": "city street with on-street parking",
+      "camera_type": "normal camera",
+      "num_movements": 2,
+      "roi_vertices": 4
+    },
+    "cam_19": {
+      "camera_id": "cam_19",
+      "videos": [
+        "cam_19.mp4"
+      ],
+      "intersection_type": "city street with on-street parking",
+      "camera_type": "normal camera",
+      "num_movements": 2,
+      "roi_vertices": 4
+    },
+    "cam_2": {
+      "camera_id": "cam_2",
+      "videos": [
+        "cam_2.mp4",
+        "cam_2_rain.mp4"
+      ],
+      "intersection_type": "highway on ramp, off ramp and normal segments",
+      "camera_type": "long range PTZ camera",
+      "num_movements": 4,
+      "roi_vertices": 5
+    },
+    "cam_20": {
+      "camera_id": "cam_20",
+      "videos": [
+        "cam_20.mp4"
+      ],
+      "intersection_type": "city street with on-street parking",
+      "camera_type": "normal camera",
+      "num_movements": 2,
+      "roi_vertices": 4
+    },
+    "cam_3": {
+      "camera_id": "cam_3",
+      "videos": [
+        "cam_3.mp4",
+        "cam_3_rain.mp4"
+      ],
+      "intersection_type": "highway on ramp, off ramp and normal segments",
+      "camera_type": "long range PTZ camera",
+      "num_movements": 4,
+      "roi_vertices": 4
+    },
+    "cam_4": {
+      "camera_id": "cam_4",
+      "videos": [
+        "cam_4.mp4",
+        "cam_4_dawn.mp4",
+        "cam_4_rain.mp4"
+      ],
+      "intersection_type": "four-leg signalized Intersection",
+      "camera_type": "fisheye camera",
+      "num_movements": 12,
+      "roi_vertices": 6
+    },
+    "cam_5": {
+      "camera_id": "cam_5",
+      "videos": [
+        "cam_5.mp4",
+        "cam_5_dawn.mp4",
+        "cam_5_rain.mp4"
+      ],
+      "intersection_type": "four-leg signalized Intersection",
+      "camera_type": "fisheye camera",
+      "num_movements": 12,
+      "roi_vertices": 6
+    },
+    "cam_6": {
+      "camera_id": "cam_6",
+      "videos": [
+        "cam_6.mp4",
+        "cam_6_snow.mp4"
+      ],
+      "intersection_type": "four-leg signalized Intersection",
+      "camera_type": "fisheye camera",
+      "num_movements": 12,
+      "roi_vertices": 6
+    },
+    "cam_7": {
+      "camera_id": "cam_7",
+      "videos": [
+        "cam_7.mp4",
+        "cam_7_dawn.mp4",
+        "cam_7_rain.mp4"
+      ],
+      "intersection_type": "four-leg signalized Intersection",
+      "camera_type": "long range PTZ camera",
+      "num_movements": 12,
+      "roi_vertices": 5
+    },
+    "cam_8": {
+      "camera_id": "cam_8",
+      "videos": [
+        "cam_8.mp4"
+      ],
+      "intersection_type": "three-leg allway-stop interction",
+      "camera_type": "fisheye camera",
+      "num_movements": 6,
+      "roi_vertices": 6
+    },
+    "cam_9": {
+      "camera_id": "cam_9",
+      "videos": [
+        "cam_9.mp4"
+      ],
+      "intersection_type": "four-leg allway-stop interction",
+      "camera_type": "normal camera",
+      "num_movements": 12,
+      "roi_vertices": 5
+    }
+  },
+  "videos": [
+    {
+      "filename": "cam_1.mp4",
+      "path": "C:\\Users\\haras\\Desktop\\openhack\\AIC21_Track1_Vehicle_Counting\\Dataset_A\\cam_1.mp4",
+      "size_bytes": 80149965,
+      "size_mb": 76.44,
+      "exists": true,
+      "readable": true,
+      "fps_opencv": 10.0,
+      "fps_stated": "10/1",
+      "width": 1280,
+      "height": 960,
+      "frame_count_opencv": 3000,
+      "frame_count_stated": 3000,
+      "duration_seconds": 300.0,
+      "duration_minutes": 5.0,
+      "codec": "h264",
+      "error": null
+    },
+    {
+      "filename": "cam_10.mp4",
+      "path": "C:\\Users\\haras\\Desktop\\openhack\\AIC21_Track1_Vehicle_Counting\\Dataset_A\\cam_10.mp4",
+      "size_bytes": 177361619,
+      "size_mb": 169.15,
+      "exists": true,
+      "readable": true,
+      "fps_opencv": 10.0,
+      "fps_stated": "10/1",
+      "width": 1920,
+      "height": 1080,
+      "frame_count_opencv": 2111,
+      "frame_count_stated": 2111,
+      "duration_seconds": 211.1,
+      "duration_minutes": 3.52,
+      "codec": "h264",
+      "error": null
+    },
+    {
+      "filename": "cam_11.mp4",
+      "path": "C:\\Users\\haras\\Desktop\\openhack\\AIC21_Track1_Vehicle_Counting\\Dataset_A\\cam_11.mp4",
+      "size_bytes": 125932389,
+      "size_mb": 120.1,
+      "exists": true,
+      "readable": true,
+      "fps_opencv": 10.0,
+      "fps_stated": "10/1",
+      "width": 1920,
+      "height": 1080,
+      "frame_count_opencv": 2111,
+      "frame_count_stated": 2111,
+      "duration_seconds": 211.1,
+      "duration_minutes": 3.52,
+      "codec": "h264",
+      "error": null
+    },
+    {
+      "filename": "cam_12.mp4",
+      "path": "C:\\Users\\haras\\Desktop\\openhack\\AIC21_Track1_Vehicle_Counting\\Dataset_A\\cam_12.mp4",
+      "size_bytes": 93006495,
+      "size_mb": 88.7,
+      "exists": true,
+      "readable": true,
+      "fps_opencv": 10.0,
+      "fps_stated": "10/1",
+      "width": 1920,
+      "height": 1080,
+      "frame_count_opencv": 1997,
+      "frame_count_stated": 1997,
+      "duration_seconds": 199.7,
+      "duration_minutes": 3.33,
+      "codec": "h264",
+      "error": null
+    },
+    {
+      "filename": "cam_13.mp4",
+      "path": "C:\\Users\\haras\\Desktop\\openhack\\AIC21_Track1_Vehicle_Counting\\Dataset_A\\cam_13.mp4",
+      "size_bytes": 158696718,
+      "size_mb": 151.34,
+      "exists": true,
+      "readable": true,
+      "fps_opencv": 10.0,
+      "fps_stated": "10/1",
+      "width": 1920,
+      "height": 1080,
+      "frame_count_opencv": 1966,
+      "frame_count_stated": 1966,
+      "duration_seconds": 196.6,
+      "duration_minutes": 3.28,
+      "codec": "h264",
+      "error": null
+    },
+    {
+      "filename": "cam_14.mp4",
+      "path": "C:\\Users\\haras\\Desktop\\openhack\\AIC21_Track1_Vehicle_Counting\\Dataset_A\\cam_14.mp4",
+      "size_bytes": 231301481,
+      "size_mb": 220.59,
+      "exists": true,
+      "readable": true,
+      "fps_opencv": 10.0,
+      "fps_stated": "10/1",
+      "width": 2560,
+      "height": 1920,
+      "frame_count_opencv": 3000,
+      "frame_count_stated": 3000,
+      "duration_seconds": 300.0,
+      "duration_minutes": 5.0,
+      "codec": "h264",
+      "error": null
+    },
+    {
+      "filename": "cam_15.mp4",
+      "path": "C:\\Users\\haras\\Desktop\\openhack\\AIC21_Track1_Vehicle_Counting\\Dataset_A\\cam_15.mp4",
+      "size_bytes": 255163787,
+      "size_mb": 243.34,
+      "exists": true,
+      "readable": true,
+      "fps_opencv": 10.0,
+      "fps_stated": "10/1",
+      "width": 1920,
+      "height": 1080,
+      "frame_count_opencv": 3000,
+      "frame_count_stated": 3000,
+      "duration_seconds": 300.0,
+      "duration_minutes": 5.0,
+      "codec": "h264",
+      "error": null
+    },
+    {
+      "filename": "cam_16.mp4",
+      "path": "C:\\Users\\haras\\Desktop\\openhack\\AIC21_Track1_Vehicle_Counting\\Dataset_A\\cam_16.mp4",
+      "size_bytes": 166275479,
+      "size_mb": 158.57,
+      "exists": true,
+      "readable": true,
+      "fps_opencv": 10.0,
+      "fps_stated": "10/1",
+      "width": 1920,
+      "height": 1080,
+      "frame_count_opencv": 3000,
+      "frame_count_stated": 3000,
+      "duration_seconds": 300.0,
+      "duration_minutes": 5.0,
+      "codec": "h264",
+      "error": null
+    },
+    {
+      "filename": "cam_17.mp4",
+      "path": "C:\\Users\\haras\\Desktop\\openhack\\AIC21_Track1_Vehicle_Counting\\Dataset_A\\cam_17.mp4",
+      "size_bytes": 187911585,
+      "size_mb": 179.21,
+      "exists": true,
+      "readable": true,
+      "fps_opencv": 10.0,
+      "fps_stated": "10/1",
+      "width": 1920,
+      "height": 1080,
+      "frame_count_opencv": 3000,
+      "frame_count_stated": 3000,
+      "duration_seconds": 300.0,
+      "duration_minutes": 5.0,
+      "codec": "h264",
+      "error": null
+    },
+    {
+      "filename": "cam_18.mp4",
+      "path": "C:\\Users\\haras\\Desktop\\openhack\\AIC21_Track1_Vehicle_Counting\\Dataset_A\\cam_18.mp4",
+      "size_bytes": 179024713,
+      "size_mb": 170.73,
+      "exists": true,
+      "readable": true,
+      "fps_opencv": 10.0,
+      "fps_stated": "10/1",
+      "width": 1920,
+      "height": 1080,
+      "frame_count_opencv": 3000,
+      "frame_count_stated": 3000,
+      "duration_seconds": 300.0,
+      "duration_minutes": 5.0,
+      "codec": "h264",
+      "error": null
+    },
+    {
+      "filename": "cam_19.mp4",
+      "path": "C:\\Users\\haras\\Desktop\\openhack\\AIC21_Track1_Vehicle_Counting\\Dataset_A\\cam_19.mp4",
+      "size_bytes": 221479998,
+      "size_mb": 211.22,
+      "exists": true,
+      "readable": true,
+      "fps_opencv": 10.0,
+      "fps_stated": "10/1",
+      "width": 1920,
+      "height": 1080,
+      "frame_count_opencv": 3000,
+      "frame_count_stated": 3000,
+      "duration_seconds": 300.0,
+      "duration_minutes": 5.0,
+      "codec": "h264",
+      "error": null
+    },
+    {
+      "filename": "cam_1_dawn.mp4",
+      "path": "C:\\Users\\haras\\Desktop\\openhack\\AIC21_Track1_Vehicle_Counting\\Dataset_A\\cam_1_dawn.mp4",
+      "size_bytes": 47935243,
+      "size_mb": 45.71,
+      "exists": true,
+      "readable": true,
+      "fps_opencv": 10.0,
+      "fps_stated": "10/1",
+      "width": 1280,
+      "height": 960,
+      "frame_count_opencv": 3000,
+      "frame_count_stated": 3000,
+      "duration_seconds": 300.0,
+      "duration_minutes": 5.0,
+      "codec": "h264",
+      "error": null
+    },
+    {
+      "filename": "cam_1_rain.mp4",
+      "path": "C:\\Users\\haras\\Desktop\\openhack\\AIC21_Track1_Vehicle_Counting\\Dataset_A\\cam_1_rain.mp4",
+      "size_bytes": 61152945,
+      "size_mb": 58.32,
+      "exists": true,
+      "readable": true,
+      "fps_opencv": 10.0,
+      "fps_stated": "10/1",
+      "width": 1280,
+      "height": 960,
+      "frame_count_opencv": 2961,
+      "frame_count_stated": 2961,
+      "duration_seconds": 296.1,
+      "duration_minutes": 4.94,
+      "codec": "h264",
+      "error": null
+    },
+    {
+      "filename": "cam_2.mp4",
+      "path": "C:\\Users\\haras\\Desktop\\openhack\\AIC21_Track1_Vehicle_Counting\\Dataset_A\\cam_2.mp4",
+      "size_bytes": 351389905,
+      "size_mb": 335.11,
+      "exists": true,
+      "readable": true,
+      "fps_opencv": 10.0,
+      "fps_stated": "10/1",
+      "width": 1280,
+      "height": 720,
+      "frame_count_opencv": 18000,
+      "frame_count_stated": 18000,
+      "duration_seconds": 1800.0,
+      "duration_minutes": 30.0,
+      "codec": "h264",
+      "error": null
+    },
+    {
+      "filename": "cam_20.mp4",
+      "path": "C:\\Users\\haras\\Desktop\\openhack\\AIC21_Track1_Vehicle_Counting\\Dataset_A\\cam_20.mp4",
+      "size_bytes": 255588744,
+      "size_mb": 243.75,
+      "exists": true,
+      "readable": true,
+      "fps_opencv": 10.0,
+      "fps_stated": "10/1",
+      "width": 1920,
+      "height": 1080,
+      "frame_count_opencv": 3000,
+      "frame_count_stated": 3000,
+      "duration_seconds": 300.0,
+      "duration_minutes": 5.0,
+      "codec": "h264",
+      "error": null
+    },
+    {
+      "filename": "cam_2_rain.mp4",
+      "path": "C:\\Users\\haras\\Desktop\\openhack\\AIC21_Track1_Vehicle_Counting\\Dataset_A\\cam_2_rain.mp4",
+      "size_bytes": 45829727,
+      "size_mb": 43.71,
+      "exists": true,
+      "readable": true,
+      "fps_opencv": 10.0,
+      "fps_stated": "10/1",
+      "width": 1280,
+      "height": 720,
+      "frame_count_opencv": 3000,
+      "frame_count_stated": 3000,
+      "duration_seconds": 300.0,
+      "duration_minutes": 5.0,
+      "codec": "h264",
+      "error": null
+    },
+    {
+      "filename": "cam_3.mp4",
+      "path": "C:\\Users\\haras\\Desktop\\openhack\\AIC21_Track1_Vehicle_Counting\\Dataset_A\\cam_3.mp4",
+      "size_bytes": 241985291,
+      "size_mb": 230.78,
+      "exists": true,
+      "readable": true,
+      "fps_opencv": 10.0,
+      "fps_stated": "10/1",
+      "width": 1280,
+      "height": 720,
+      "frame_count_opencv": 18000,
+      "frame_count_stated": 18000,
+      "duration_seconds": 1800.0,
+      "duration_minutes": 30.0,
+      "codec": "h264",
+      "error": null
+    },
+    {
+      "filename": "cam_3_rain.mp4",
+      "path": "C:\\Users\\haras\\Desktop\\openhack\\AIC21_Track1_Vehicle_Counting\\Dataset_A\\cam_3_rain.mp4",
+      "size_bytes": 33051116,
+      "size_mb": 31.52,
+      "exists": true,
+      "readable": true,
+      "fps_opencv": 10.0,
+      "fps_stated": "10/1",
+      "width": 1280,
+      "height": 720,
+      "frame_count_opencv": 3000,
+      "frame_count_stated": 3000,
+      "duration_seconds": 300.0,
+      "duration_minutes": 5.0,
+      "codec": "h264",
+      "error": null
+    },
+    {
+      "filename": "cam_4.mp4",
+      "path": "C:\\Users\\haras\\Desktop\\openhack\\AIC21_Track1_Vehicle_Counting\\Dataset_A\\cam_4.mp4",
+      "size_bytes": 421260715,
+      "size_mb": 401.75,
+      "exists": true,
+      "readable": true,
+      "fps_opencv": 15.0,
+      "fps_stated": "15/1",
+      "width": 1280,
+      "height": 960,
+      "frame_count_opencv": 27000,
+      "frame_count_stated": 27000,
+      "duration_seconds": 1800.0,
+      "duration_minutes": 30.0,
+      "codec": "h264",
+      "error": null
+    },
+    {
+      "filename": "cam_4_dawn.mp4",
+      "path": "C:\\Users\\haras\\Desktop\\openhack\\AIC21_Track1_Vehicle_Counting\\Dataset_A\\cam_4_dawn.mp4",
+      "size_bytes": 57158388,
+      "size_mb": 54.51,
+      "exists": true,
+      "readable": true,
+      "fps_opencv": 15.0,
+      "fps_stated": "15/1",
+      "width": 1280,
+      "height": 960,
+      "frame_count_opencv": 4500,
+      "frame_count_stated": 4500,
+      "duration_seconds": 300.0,
+      "duration_minutes": 5.0,
+      "codec": "h264",
+      "error": null
+    },
+    {
+      "filename": "cam_4_rain.mp4",
+      "path": "C:\\Users\\haras\\Desktop\\openhack\\AIC21_Track1_Vehicle_Counting\\Dataset_A\\cam_4_rain.mp4",
+      "size_bytes": 48625397,
+      "size_mb": 46.37,
+      "exists": true,
+      "readable": true,
+      "fps_opencv": 10.0,
+      "fps_stated": "10/1",
+      "width": 1280,
+      "height": 960,
+      "frame_count_opencv": 3000,
+      "frame_count_stated": 3000,
+      "duration_seconds": 300.0,
+      "duration_minutes": 5.0,
+      "codec": "h264",
+      "error": null
+    },
+    {
+      "filename": "cam_5.mp4",
+      "path": "C:\\Users\\haras\\Desktop\\openhack\\AIC21_Track1_Vehicle_Counting\\Dataset_A\\cam_5.mp4",
+      "size_bytes": 427687886,
+      "size_mb": 407.87,
+      "exists": true,
+      "readable": true,
+      "fps_opencv": 10.0,
+      "fps_stated": "10/1",
+      "width": 1280,
+      "height": 960,
+      "frame_count_opencv": 18000,
+      "frame_count_stated": 18000,
+      "duration_seconds": 1800.0,
+      "duration_minutes": 30.0,
+      "codec": "h264",
+      "error": null
+    },
+    {
+      "filename": "cam_5_dawn.mp4",
+      "path": "C:\\Users\\haras\\Desktop\\openhack\\AIC21_Track1_Vehicle_Counting\\Dataset_A\\cam_5_dawn.mp4",
+      "size_bytes": 39280846,
+      "size_mb": 37.46,
+      "exists": true,
+      "readable": true,
+      "fps_opencv": 10.0,
+      "fps_stated": "10/1",
+      "width": 1280,
+      "height": 960,
+      "frame_count_opencv": 3000,
+      "frame_count_stated": 3000,
+      "duration_seconds": 300.0,
+      "duration_minutes": 5.0,
+      "codec": "h264",
+      "error": null
+    },
+    {
+      "filename": "cam_5_rain.mp4",
+      "path": "C:\\Users\\haras\\Desktop\\openhack\\AIC21_Track1_Vehicle_Counting\\Dataset_A\\cam_5_rain.mp4",
+      "size_bytes": 56259975,
+      "size_mb": 53.65,
+      "exists": true,
+      "readable": true,
+      "fps_opencv": 10.0,
+      "fps_stated": "10/1",
+      "width": 1280,
+      "height": 960,
+      "frame_count_opencv": 3000,
+      "frame_count_stated": 3000,
+      "duration_seconds": 300.0,
+      "duration_minutes": 5.0,
+      "codec": "h264",
+      "error": null
+    },
+    {
+      "filename": "cam_6.mp4",
+      "path": "C:\\Users\\haras\\Desktop\\openhack\\AIC21_Track1_Vehicle_Counting\\Dataset_A\\cam_6.mp4",
+      "size_bytes": 387309808,
+      "size_mb": 369.37,
+      "exists": true,
+      "readable": true,
+      "fps_opencv": 10.0,
+      "fps_stated": "10/1",
+      "width": 1280,
+      "height": 960,
+      "frame_count_opencv": 18000,
+      "frame_count_stated": 18000,
+      "duration_seconds": 1800.0,
+      "duration_minutes": 30.0,
+      "codec": "h264",
+      "error": null
+    },
+    {
+      "filename": "cam_6_snow.mp4",
+      "path": "C:\\Users\\haras\\Desktop\\openhack\\AIC21_Track1_Vehicle_Counting\\Dataset_A\\cam_6_snow.mp4",
+      "size_bytes": 63736634,
+      "size_mb": 60.78,
+      "exists": true,
+      "readable": true,
+      "fps_opencv": 10.0,
+      "fps_stated": "10/1",
+      "width": 1280,
+      "height": 960,
+      "frame_count_opencv": 3000,
+      "frame_count_stated": 3000,
+      "duration_seconds": 300.0,
+      "duration_minutes": 5.0,
+      "codec": "h264",
+      "error": null
+    },
+    {
+      "filename": "cam_7.mp4",
+      "path": "C:\\Users\\haras\\Desktop\\openhack\\AIC21_Track1_Vehicle_Counting\\Dataset_A\\cam_7.mp4",
+      "size_bytes": 802489660,
+      "size_mb": 765.31,
+      "exists": true,
+      "readable": true,
+      "fps_opencv": 8.0,
+      "fps_stated": "8/1",
+      "width": 1280,
+      "height": 960,
+      "frame_count_opencv": 14400,
+      "frame_count_stated": 14400,
+      "duration_seconds": 1800.0,
+      "duration_minutes": 30.0,
+      "codec": "h264",
+      "error": null
+    },
+    {
+      "filename": "cam_7_dawn.mp4",
+      "path": "C:\\Users\\haras\\Desktop\\openhack\\AIC21_Track1_Vehicle_Counting\\Dataset_A\\cam_7_dawn.mp4",
+      "size_bytes": 81101096,
+      "size_mb": 77.34,
+      "exists": true,
+      "readable": true,
+      "fps_opencv": 8.0,
+      "fps_stated": "8/1",
+      "width": 1280,
+      "height": 960,
+      "frame_count_opencv": 2400,
+      "frame_count_stated": 2400,
+      "duration_seconds": 300.0,
+      "duration_minutes": 5.0,
+      "codec": "h264",
+      "error": null
+    },
+    {
+      "filename": "cam_7_rain.mp4",
+      "path": "C:\\Users\\haras\\Desktop\\openhack\\AIC21_Track1_Vehicle_Counting\\Dataset_A\\cam_7_rain.mp4",
+      "size_bytes": 103681082,
+      "size_mb": 98.88,
+      "exists": true,
+      "readable": true,
+      "fps_opencv": 10.0,
+      "fps_stated": "10/1",
+      "width": 1280,
+      "height": 960,
+      "frame_count_opencv": 3000,
+      "frame_count_stated": 3000,
+      "duration_seconds": 300.0,
+      "duration_minutes": 5.0,
+      "codec": "h264",
+      "error": null
+    },
+    {
+      "filename": "cam_8.mp4",
+      "path": "C:\\Users\\haras\\Desktop\\openhack\\AIC21_Track1_Vehicle_Counting\\Dataset_A\\cam_8.mp4",
+      "size_bytes": 162994725,
+      "size_mb": 155.44,
+      "exists": true,
+      "readable": true,
+      "fps_opencv": 10.0,
+      "fps_stated": "10/1",
+      "width": 1920,
+      "height": 1080,
+      "frame_count_opencv": 3000,
+      "frame_count_stated": 3000,
+      "duration_seconds": 300.0,
+      "duration_minutes": 5.0,
+      "codec": "h264",
+      "error": null
+    },
+    {
+      "filename": "cam_9.mp4",
+      "path": "C:\\Users\\haras\\Desktop\\openhack\\AIC21_Track1_Vehicle_Counting\\Dataset_A\\cam_9.mp4",
+      "size_bytes": 175517913,
+      "size_mb": 167.39,
+      "exists": true,
+      "readable": true,
+      "fps_opencv": 10.0,
+      "fps_stated": "10/1",
+      "width": 1920,
+      "height": 1080,
+      "frame_count_opencv": 3000,
+      "frame_count_stated": 3000,
+      "duration_seconds": 300.0,
+      "duration_minutes": 5.0,
+      "codec": "h264",
+      "error": null
+    }
+  ],
+  "roi_data": {
+    "cam_1": {
+      "num_vertices": 5,
+      "vertices": [
+        [
+          1,
+          150
+        ],
+        [
+          844,
+          96
+        ],
+        [
+          1277,
+          277
+        ],
+        [
+          1277,
+          750
+        ],
+        [
+          2,
+          683
+        ]
+      ]
+    },
+    "cam_10": {
+      "num_vertices": 4,
+      "vertices": [
+        [
+          2,
+          228
+        ],
+        [
+          1916,
+          300
+        ],
+        [
+          1916,
+          1076
+        ],
+        [
+          2,
+          1074
+        ]
+      ]
+    },
+    "cam_11": {
+      "num_vertices": 4,
+      "vertices": [
+        [
+          2,
+          296
+        ],
+        [
+          1916,
+          306
+        ],
+        [
+          1918,
+          1076
+        ],
+        [
+          0,
+          1072
+        ]
+      ]
+    },
+    "cam_12": {
+      "num_vertices": 5,
+      "vertices": [
+        [
+          4,
+          172
+        ],
+        [
+          1522,
+          198
+        ],
+        [
+          1916,
+          312
+        ],
+        [
+          1916,
+          1076
+        ],
+        [
+          2,
+          1074
+        ]
+      ]
+    },
+    "cam_13": {
+      "num_vertices": 4,
+      "vertices": [
+        [
+          2,
+          126
+        ],
+        [
+          1916,
+          88
+        ],
+        [
+          1918,
+          1076
+        ],
+        [
+          2,
+          1074
+        ]
+      ]
+    },
+    "cam_14": {
+      "num_vertices": 4,
+      "vertices": [
+        [
+          2,
+          870
+        ],
+        [
+          2554,
+          1108
+        ],
+        [
+          2556,
+          1912
+        ],
+        [
+          2,
+          1912
+        ]
+      ]
+    },
+    "cam_15": {
+      "num_vertices": 5,
+      "vertices": [
+        [
+          4,
+          282
+        ],
+        [
+          858,
+          200
+        ],
+        [
+          1918,
+          360
+        ],
+        [
+          1916,
+          1074
+        ],
+        [
+          2,
+          1074
+        ]
+      ]
+    },
+    "cam_16": {
+      "num_vertices": 4,
+      "vertices": [
+        [
+          2,
+          198
+        ],
+        [
+          1918,
+          216
+        ],
+        [
+          1916,
+          1074
+        ],
+        [
+          2,
+          1072
+        ]
+      ]
+    },
+    "cam_17": {
+      "num_vertices": 4,
+      "vertices": [
+        [
+          0,
+          224
+        ],
+        [
+          1916,
+          222
+        ],
+        [
+          1916,
+          1076
+        ],
+        [
+          2,
+          1072
+        ]
+      ]
+    },
+    "cam_18": {
+      "num_vertices": 4,
+      "vertices": [
+        [
+          4,
+          276
+        ],
+        [
+          1920,
+          280
+        ],
+        [
+          1918,
+          1078
+        ],
+        [
+          2,
+          1072
+        ]
+      ]
+    },
+    "cam_19": {
+      "num_vertices": 4,
+      "vertices": [
+        [
+          2,
+          364
+        ],
+        [
+          1914,
+          374
+        ],
+        [
+          1916,
+          1074
+        ],
+        [
+          4,
+          1072
+        ]
+      ]
+    },
+    "cam_2": {
+      "num_vertices": 5,
+      "vertices": [
+        [
+          1,
+          26
+        ],
+        [
+          751,
+          24
+        ],
+        [
+          1277,
+          149
+        ],
+        [
+          1278,
+          718
+        ],
+        [
+          2,
+          717
+        ]
+      ]
+    },
+    "cam_20": {
+      "num_vertices": 4,
+      "vertices": [
+        [
+          4,
+          512
+        ],
+        [
+          1918,
+          454
+        ],
+        [
+          1916,
+          1076
+        ],
+        [
+          2,
+          1074
+        ]
+      ]
+    },
+    "cam_3": {
+      "num_vertices": 4,
+      "vertices": [
+        [
+          1,
+          191
+        ],
+        [
+          1279,
+          86
+        ],
+        [
+          1278,
+          623
+        ],
+        [
+          1,
+          629
+        ]
+      ]
+    },
+    "cam_4": {
+      "num_vertices": 6,
+      "vertices": [
+        [
+          1,
+          198
+        ],
+        [
+          342,
+          116
+        ],
+        [
+          750,
+          81
+        ],
+        [
+          1279,
+          264
+        ],
+        [
+          1278,
+          956
+        ],
+        [
+          0,
+          956
+        ]
+      ]
+    },
+    "cam_5": {
+      "num_vertices": 6,
+      "vertices": [
+        [
+          1,
+          277
+        ],
+        [
+          450,
+          99
+        ],
+        [
+          599,
+          96
+        ],
+        [
+          1172,
+          280
+        ],
+        [
+          960,
+          955
+        ],
+        [
+          0,
+          956
+        ]
+      ]
+    },
+    "cam_6": {
+      "num_vertices": 6,
+      "vertices": [
+        [
+          1,
+          265
+        ],
+        [
+          496,
+          127
+        ],
+        [
+          793,
+          162
+        ],
+        [
+          1278,
+          453
+        ],
+        [
+          1279,
+          957
+        ],
+        [
+          0,
+          956
+        ]
+      ]
+    },
+    "cam_7": {
+      "num_vertices": 5,
+      "vertices": [
+        [
+          2,
+          415
+        ],
+        [
+          421,
+          386
+        ],
+        [
+          1277,
+          468
+        ],
+        [
+          1279,
+          716
+        ],
+        [
+          2,
+          596
+        ]
+      ]
+    },
+    "cam_8": {
+      "num_vertices": 6,
+      "vertices": [
+        [
+          3,
+          300
+        ],
+        [
+          1031,
+          2
+        ],
+        [
+          1567,
+          177
+        ],
+        [
+          1913,
+          576
+        ],
+        [
+          1917,
+          1074
+        ],
+        [
+          1,
+          1076
+        ]
+      ]
+    },
+    "cam_9": {
+      "num_vertices": 5,
+      "vertices": [
+        [
+          4,
+          270
+        ],
+        [
+          1036,
+          132
+        ],
+        [
+          1916,
+          280
+        ],
+        [
+          1918,
+          1076
+        ],
+        [
+          0,
+          1074
+        ]
+      ]
+    }
+  },
+  "movement_data": {
+    "cam_1": {
+      "intersection_type": "highway on ramp, off ramp and normal segments",
+      "camera_type": "normal camera",
+      "movements": {
+        "1": "highway through movement",
+        "2": "highway through movement",
+        "3": "highway on ramp",
+        "4": "highway off ramp"
+      },
+      "notes": [
+        "note:"
+      ]
+    },
+    "cam_10": {
+      "intersection_type": "Intersection Single Approach with separate right-turning lane and separate left-turning lane",
+      "camera_type": "normal camera",
+      "movements": {
+        "1": "right-turning movement",
+        "2": "through movement",
+        "3": "left-turning movement"
+      },
+      "notes": [
+        "note:"
+      ]
+    },
+    "cam_11": {
+      "intersection_type": "Intersection Single Approach with separate right-turning lane and separate left-turning lane",
+      "camera_type": "normal camera",
+      "movements": {
+        "1": "right-turning movement",
+        "2": "through movement",
+        "3": "left-turning movement"
+      },
+      "notes": [
+        "note:"
+      ]
+    },
+    "cam_12": {
+      "intersection_type": "Intersection Single Approach with shared right-turning lane and separate left-turning lane",
+      "camera_type": "normal camera",
+      "movements": {
+        "1": "right-turning movement",
+        "2": "through movement",
+        "3": "left-turning movement"
+      },
+      "notes": [
+        "note:"
+      ]
+    },
+    "cam_13": {
+      "intersection_type": "Intersection Single Approach with shared right-turning lane and separate left-turning lane",
+      "camera_type": "normal camera",
+      "movements": {
+        "1": "right-turning movement",
+        "2": "through movement",
+        "3": "left-turning movement"
+      },
+      "notes": []
+    },
+    "cam_14": {
+      "intersection_type": "city street without on-street parking",
+      "camera_type": "normal camera, tilted view",
+      "movements": {
+        "1": "through movement",
+        "2": "through movement"
+      },
+      "notes": [
+        "note:"
+      ]
+    },
+    "cam_15": {
+      "intersection_type": "city street without on-street parking",
+      "camera_type": "normal camera",
+      "movements": {
+        "1": "through movement",
+        "2": "through movement"
+      },
+      "notes": [
+        "note:"
+      ]
+    },
+    "cam_16": {
+      "intersection_type": "city street with on-street parking",
+      "camera_type": "normal camera",
+      "movements": {
+        "1": "through movement",
+        "2": "through movement"
+      },
+      "notes": [
+        "note:"
+      ]
+    },
+    "cam_17": {
+      "intersection_type": "city street with on-street parking",
+      "camera_type": "normal camera",
+      "movements": {
+        "1": "through movement",
+        "2": "through movement"
+      },
+      "notes": [
+        "note:"
+      ]
+    },
+    "cam_18": {
+      "intersection_type": "city street with on-street parking",
+      "camera_type": "normal camera",
+      "movements": {
+        "1": "through movement",
+        "2": "through movement"
+      },
+      "notes": [
+        "note:"
+      ]
+    },
+    "cam_19": {
+      "intersection_type": "city street with on-street parking",
+      "camera_type": "normal camera",
+      "movements": {
+        "1": "through movement",
+        "2": "through movement"
+      },
+      "notes": [
+        "note:"
+      ]
+    },
+    "cam_2": {
+      "intersection_type": "highway on ramp, off ramp and normal segments",
+      "camera_type": "long range PTZ camera",
+      "movements": {
+        "1": "highway through movement",
+        "2": "highway through movement",
+        "3": "highway off ramp",
+        "4": "highway on ramp"
+      },
+      "notes": []
+    },
+    "cam_20": {
+      "intersection_type": "city street with on-street parking",
+      "camera_type": "normal camera",
+      "movements": {
+        "1": "through movement",
+        "2": "through movement"
+      },
+      "notes": [
+        "note:"
+      ]
+    },
+    "cam_3": {
+      "intersection_type": "highway on ramp, off ramp and normal segments",
+      "camera_type": "long range PTZ camera",
+      "movements": {
+        "1": "highway through movement",
+        "2": "highway through movement",
+        "3": "highway off ramp",
+        "4": "highway on ramp"
+      },
+      "notes": [
+        "note:"
+      ]
+    },
+    "cam_4": {
+      "intersection_type": "four-leg signalized Intersection",
+      "camera_type": "fisheye camera",
+      "movements": {
+        "1": "right-turning movement",
+        "2": "through movement",
+        "3": "left-turning movement",
+        "4": "right-turning movement",
+        "5": "through movement",
+        "6": "left-turning movement",
+        "7": "right-turning movement",
+        "8": "through movement",
+        "9": "left-turning movement",
+        "10": "right-turning movement",
+        "11": "through movement",
+        "12": "left-turning movement"
+      },
+      "notes": [
+        "note:"
+      ]
+    },
+    "cam_5": {
+      "intersection_type": "four-leg signalized Intersection",
+      "camera_type": "fisheye camera",
+      "movements": {
+        "1": "right-turning movement",
+        "2": "through movement",
+        "3": "left-turning movement",
+        "4": "right-turning movement",
+        "5": "through movement",
+        "6": "left-turning movement",
+        "7": "right-turning movement",
+        "8": "through movement",
+        "9": "left-turning movement",
+        "10": "right-turning movement",
+        "11": "through movement",
+        "12": "left-turning movement"
+      },
+      "notes": [
+        "note:"
+      ]
+    },
+    "cam_6": {
+      "intersection_type": "four-leg signalized Intersection",
+      "camera_type": "fisheye camera",
+      "movements": {
+        "1": "right-turning movement",
+        "2": "through movement",
+        "3": "left-turning movement",
+        "4": "right-turning movement",
+        "5": "through movement",
+        "6": "left-turning movement",
+        "7": "right-turning movement",
+        "8": "through movement",
+        "9": "left-turning movement",
+        "10": "right-turning movement",
+        "11": "through movement",
+        "12": "left-turning movement"
+      },
+      "notes": [
+        "note:"
+      ]
+    },
+    "cam_7": {
+      "intersection_type": "four-leg signalized Intersection",
+      "camera_type": "long range PTZ camera",
+      "movements": {
+        "1": "right-turning movement",
+        "2": "through movement",
+        "3": "left-turning movement",
+        "4": "right-turning movement",
+        "5": "through movement",
+        "6": "left-turning movement",
+        "7": "right-turning movement",
+        "8": "through movement",
+        "9": "left-turning movement",
+        "10": "right-turning movement",
+        "11": "through movement",
+        "12": "left-turning movement"
+      },
+      "notes": [
+        "note:"
+      ]
+    },
+    "cam_8": {
+      "intersection_type": "three-leg allway-stop interction",
+      "camera_type": "fisheye camera",
+      "movements": {
+        "1": "through movement",
+        "2": "left-turning movement",
+        "3": "right-turning movement",
+        "4": "left-turning movement",
+        "5": "right_turning movement",
+        "6": "through movement"
+      },
+      "notes": []
+    },
+    "cam_9": {
+      "intersection_type": "four-leg allway-stop interction",
+      "camera_type": "normal camera",
+      "movements": {
+        "1": "right-turning movement",
+        "2": "through movement",
+        "3": "left-turning movement",
+        "4": "right-turning movement",
+        "5": "through movement",
+        "6": "left-turning movement",
+        "7": "right-turning movement",
+        "8": "through movement",
+        "9": "left-turning movement",
+        "10": "right-turning movement",
+        "11": "through movement",
+        "12": "left-turning movement"
+      },
+      "notes": []
+    }
+  },
+  "ground_truth": {
+    "counting_example_cam_5_1min": {
+      "file": "counting_example_cam_5_1min.csv",
+      "total_events": 96,
+      "cars": 93,
+      "trucks": 3,
+      "movements_seen": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        7,
+        10,
+        11,
+        12
+      ],
+      "frame_range": [
+        15,
+        593
+      ],
+      "video_clip_ids": [
+        10
+      ]
+    }
+  },
+  "dataset_notes": {
+    "counting_rule": "Count vehicle when it fully EXITS the ROI polygon.",
+    "eligible_vehicles": "Four-wheel vehicles (Cars) and Freight Trucks only.",
+    "excluded_vehicles": "Motorcycles and bicycles are NOT counted.",
+    "u_turns": "U-turns are NOT counted.",
+    "annotation_format": "video_clip_id, frame_id, movement_id, vehicle_class_id",
+    "class_ids": {
+      "1": "Car",
+      "2": "Truck"
+    }
+  }
+}

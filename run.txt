@@ -1,0 +1,48 @@
+================================================================================
+TRAFFICTWIN — HOW TO RUN BACKEND & FRONTEND (GPU CUDA ENABLED)
+================================================================================
+
+1. PREREQUISITES & HARDWARE
+---------------------------
+- OS: Windows 10 / 11 64-bit
+- GPU: NVIDIA GeForce RTX 3050 Laptop GPU (4GB VRAM, Driver 581.83, CUDA 13.0/12.6)
+- Python 3.11+ / Anaconda with PyTorch CUDA 12.6 (FP16 Tensor Core acceleration)
+- Node.js v18+ and npm installed
+
+--------------------------------------------------------------------------------
+2. RUNNING THE BACKEND (FastAPI ML Server with GPU CUDA)
+--------------------------------------------------------------------------------
+Open a terminal in the project directory:
+
+  cd C:\Users\haras\Desktop\openhack\traffic_ml--main
+  python -m uvicorn api.server:app --host 127.0.0.1 --port 8000 --reload
+
+The backend will start at:
+  -> http://127.0.0.1:8000
+  -> Interactive Swagger API Docs: http://127.0.0.1:8000/docs
+  -> GPU & Server Health check: http://127.0.0.1:8000/health
+
+--------------------------------------------------------------------------------
+3. RUNNING THE FRONTEND (Vite + React UI)
+--------------------------------------------------------------------------------
+Open a second terminal window:
+
+  cd C:\Users\haras\Desktop\openhack\traffic_ml--main\web
+  npm install        (only needed the first time)
+  npm run dev
+
+The web app will open at:
+  -> http://127.0.0.1:5173/
+
+--------------------------------------------------------------------------------
+4. RUNNING OFFLINE ML PIPELINE DIRECTLY (CLI Mode on GPU)
+--------------------------------------------------------------------------------
+To run detection, tracking, counting and evaluation directly via Python on GPU:
+
+  cd C:\Users\haras\Desktop\openhack\traffic_ml--main
+  python main.py --video "C:/Users/haras/Desktop/openhack/AIC21_Track1_Vehicle_Counting/Dataset_A/cam_5.mp4" --camera cam_5 --gt "C:/Users/haras/Desktop/openhack/AIC21_Track1_Vehicle_Counting/counting_gt_sample/counting_example_cam_5_1min.csv" --max-frames 600
+
+Output metrics will be saved in:
+  - C:\Users\haras\Desktop\openhack\traffic_ml--main\outputs\metrics\
+  - C:\Users\haras\Desktop\openhack\traffic_ml--main\outputs\videos\
+================================================================================

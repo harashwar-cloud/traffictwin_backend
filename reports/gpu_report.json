@@ -1,0 +1,20 @@
+{
+  "cuda_available": true,
+  "device_count": 1,
+  "device_name": "NVIDIA GeForce RTX 3050 Laptop GPU",
+  "torch_version": "2.5.1+cu121",
+  "cuda_version": "12.1",
+  "nvidia_driver_version": "595.71",
+  "vram_mb": 4096,
+  "supported_architectures": [
+    "sm_50",
+    "sm_60",
+    "sm_61",
+    "sm_70",
+    "sm_75",
+    "sm_80",
+    "sm_86",
+    "sm_90"
+  ],
+  "verified_at": "2026-08-21T10:18:25+05:30"
+}
